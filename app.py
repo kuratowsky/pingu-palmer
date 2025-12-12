@@ -2,7 +2,6 @@ import pickle
 from flask import Flask, request, jsonify
 import pandas as pd
 import numpy as np
-import os
 
 app = Flask(__name__)
 
@@ -39,8 +38,7 @@ except Exception as e:
 # --- 2. ENDPOINT DE PREDICCIÓ ---
 @app.route('/predict/<model_name>', methods=['POST'])
 def predict(model_name):
-    if not MODELS or model_name not in MODELS:
-        # ... (Gestió d'errors) ...
+    if not MODELS or model_name not in MODELS:         
         return jsonify({"error": "Model no disponible"}), 404
 
     try:
@@ -67,7 +65,9 @@ def predict(model_name):
         prediction_species = SPECIES_CLASSES[prediction_index]
         
         response = {
-            # ... (Resposta igual que abans) ...
+            "model_solicitat": MODEL_NAMES[model_name],
+            "dades_entrada": data,
+            "prediccio_index": int(prediction_index),
             "prediccio_especie": prediction_species
         }
         return jsonify(response)
